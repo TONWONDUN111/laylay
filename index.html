@@ -98,6 +98,17 @@
     opacity:0;animation:rise .9s 1.4s forwards;
   }
   .hero-sub b{color:var(--gold);font-weight:600}
+  .hero-dj{
+    margin-top:2rem;
+    width:min(760px,92vw);
+    border-radius:20px;
+    border:1px solid rgba(157,77,255,.45);
+    box-shadow:0 28px 70px rgba(0,0,0,.55), 0 0 50px rgba(157,77,255,.25);
+    object-fit:cover;
+    aspect-ratio:16/9;
+    opacity:0;
+    animation:rise .9s 1.9s forwards;
+  }
   .hero-cta{
     margin-top:2.6rem;opacity:0;animation:rise .9s 1.7s forwards;
     display:inline-flex;align-items:center;gap:.7rem;
@@ -174,6 +185,14 @@
   .svc .icon{font-size:2rem;margin-bottom:.8rem;display:block;filter:grayscale(.35);transition:filter .3s,transform .3s}
   .svc h3{font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:.06em;margin-bottom:.35rem}
   .svc p{font-size:.82rem;color:var(--muted)}
+  .svc-img{
+    width:100%;
+    height:130px;
+    object-fit:cover;
+    border-radius:10px;
+    border:1px solid rgba(157,77,255,.28);
+    margin-bottom:.8rem;
+  }
   .svc .add{
     position:absolute;top:1rem;right:1rem;width:26px;height:26px;border-radius:50%;
     border:1px solid var(--muted);color:var(--muted);
@@ -239,6 +258,23 @@
   .quote small{
     display:block;margin-top:1.4rem;color:var(--muted);
     letter-spacing:.3em;text-transform:uppercase;font-size:.75rem;
+  }
+
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    gap:1rem;
+  }
+  .gallery-grid img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:14px;
+    border:1px solid rgba(157,77,255,.25);
+    box-shadow:0 14px 34px rgba(0,0,0,.35);
+  }
+  @media(max-width:900px){
+    .gallery-grid{grid-template-columns:repeat(2, minmax(0,1fr));}
   }
 
   .social-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1.2rem}
@@ -318,6 +354,7 @@
   <h1>DJ LAYA</h1>
   <p class="hero-sub">More Than Music. <b>It's An Experience.</b></p>
   <a class="hero-cta" href="#build">Build Your Party ↓</a>
+  <img class="hero-dj" src="https://images.unsplash.com/photo-1571266028243-98483f6f0f03?auto=format&fit=crop&w=1600&q=80" alt="DJ performing under club lights">
   <div class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 </header>
 
@@ -338,9 +375,9 @@
     <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-name="360 Photo Booth"><span class="icon">🎥</span><span class="add">+</span><h3>360 PHOTO BOOTH</h3><p>Slow-motion, all-angle videos your guests will post before they leave.</p></div>
     <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-name="Social Photo Booth"><span class="icon">📸</span><span class="add">+</span><h3>SOCIAL PHOTO BOOTH</h3><p>Snap, then share straight to Instagram, Facebook, and your phone on the spot.</p></div>
     <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-name="Cold Spark Machines"><span class="icon">✨</span><span class="add">+</span><h3>COLD SPARK MACHINES</h3><p>Indoor-safe spark fountains for grand entrances, first dances, and big reveals.</p></div>
-    <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-package="beverage-machine" data-title="Beverage Machine (NA/Alcohol)" data-price="119"><span class="icon">🍹</span><span class="add">+</span><h3>BEVERAGE MACHINE (NA/ALCOHOL)</h3><p>Includes cups + mix for 20</p></div>
-    <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-package="hot-dog-roller" data-title="Hot Dog Roller" data-price="109"><span class="icon">🌭</span><span class="add">+</span><h3>HOT DOG ROLLER</h3><p>Includes 20 dogs + buns</p></div>
-    <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-package="cotton-candy-maker" data-title="Cotton Candy Maker" data-price="89"><span class="icon">🍭</span><span class="add">+</span><h3>COTTON CANDY MAKER</h3><p>Includes 20 servings</p></div>
+    <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-package="beverage-machine" data-title="Beverage Machine (NA/Alcohol)" data-price="119"><img class="svc-img" src="https://images.unsplash.com/photo-1551024709-8f23befc6cf7?auto=format&fit=crop&w=900&q=80" alt="Beverage machine and drinks"><span class="icon">🍹</span><span class="add">+</span><h3>BEVERAGE MACHINE (NA/ALCOHOL)</h3><p>Includes cups + mix for 20</p></div>
+    <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-package="hot-dog-roller" data-title="Hot Dog Roller" data-price="109"><img class="svc-img" src="https://images.unsplash.com/photo-1612392062798-2df367f9c7f7?auto=format&fit=crop&w=900&q=80" alt="Hot dogs on a roller grill"><span class="icon">🌭</span><span class="add">+</span><h3>HOT DOG ROLLER</h3><p>Includes 20 dogs + buns</p></div>
+    <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-package="cotton-candy-maker" data-title="Cotton Candy Maker" data-price="89"><img class="svc-img" src="https://images.unsplash.com/photo-1514454529242-9e4677563e7a?auto=format&fit=crop&w=900&q=80" alt="Cotton candy cones"><span class="icon">🍭</span><span class="add">+</span><h3>COTTON CANDY MAKER</h3><p>Includes 20 servings</p></div>
     <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-name="Smoke &amp; Effects"><span class="icon">💨</span><span class="add">+</span><h3>SMOKE &amp; EFFECTS</h3><p>Fog, haze, and lighting effects that turn a room into a show.</p></div>
     <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-name="Balloon Decor"><span class="icon">🎈</span><span class="add">+</span><h3>BALLOON DECOR</h3><p>Arches, garlands, and photo walls built around your colors.</p></div>
     <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-name="Marquee Letters &amp; Numbers"><span class="icon">🔆</span><span class="add">+</span><h3>MARQUEE LETTERS</h3><p>Giant light-up numbers and letters - the backdrop every birthday photo needs.</p></div>
@@ -368,6 +405,18 @@
   <p>"Passion is the beat.<br>People are the heart."</p>
   <small>- DJ Laya</small>
 </div>
+
+<section id="gallery">
+  <span class="sec-eyebrow reveal">the vibe in pictures</span>
+  <h2 class="reveal">Photo Highlights</h2>
+  <p class="sec-intro reveal">Real visuals for your booking page: DJ energy, party moments, and concession-ready details.</p>
+  <div class="gallery-grid">
+    <img class="reveal" src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80" alt="DJ set and dance floor">
+    <img class="reveal" src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=900&q=80" alt="Party crowd with lights">
+    <img class="reveal" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80" alt="Concert style stage lighting">
+    <img class="reveal" src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=900&q=80" alt="Event beverage and food setup">
+  </div>
+</section>
 
 <section id="social">
   <span class="sec-eyebrow reveal">public social snapshot</span>
