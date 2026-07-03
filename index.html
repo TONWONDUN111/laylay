@@ -196,10 +196,6 @@
   }
   .lineup-label{font-family:var(--display);font-weight:700;letter-spacing:.1em;color:var(--gold);margin-right:.4rem}
   .lineup-empty{color:var(--muted);font-size:.85rem}
-  .chip{
-    background:rgba(157,77,255,.18);border:1px solid rgba(157,77,255,.5);
-    border-radius:999px;padding:.3rem .85rem;font-size:.78rem;letter-spacing:.03em;
-  }
   .lineup .go{
     margin-left:auto;background:linear-gradient(120deg,var(--neon),var(--violet));
     color:#fff;border:none;border-radius:999px;padding:.6rem 1.4rem;
@@ -220,16 +216,10 @@
   .cart-kicker{display:block;font-family:var(--display);font-weight:700;letter-spacing:.12em;color:var(--gold);font-size:.78rem;margin-bottom:.55rem;text-transform:uppercase}
   .cart-line{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center}
   .cart-empty{color:var(--muted);font-size:.85rem}
-  .cart-pill{
-    display:flex;align-items:center;gap:.75rem;
+  .cart-item{
+    display:inline-flex;align-items:center;
     background:rgba(157,77,255,.16);border:1px solid rgba(157,77,255,.4);
-    border-radius:999px;padding:.55rem .85rem;
-  }
-  .cart-pill strong{display:block;font-size:.8rem;letter-spacing:.03em}
-  .cart-pill span{display:block;font-size:.72rem;color:var(--muted)}
-  .cart-pill button{
-    border:none;border-radius:999px;padding:.4rem .8rem;cursor:pointer;
-    background:var(--gold);color:var(--ink);font-family:var(--body);font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    border-radius:999px;padding:.4rem .8rem;font-size:.78rem;
   }
   .cart-total{display:flex;align-items:baseline;gap:.45rem;white-space:nowrap}
   .cart-total span{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
@@ -341,7 +331,7 @@
   <span class="sec-eyebrow reveal">pick your vibe</span>
   <h2 class="reveal">Build Your Experience</h2>
   <p class="sec-intro reveal">Not just a DJ - a full event production. Tap everything you want at your event, then send your lineup straight to booking.</p>
-  <p class="sec-note reveal">Each concession includes 20 servings. Tap "+20 servings" in your cart to add more.</p>
+  <p class="sec-note reveal">Each concession includes 20 servings.</p>
 
   <div class="builder-grid">
     <div class="svc reveal" tabindex="0" role="button" aria-pressed="false" data-name="DJ &amp; Live Sound"><span class="icon">🎧</span><span class="add">+</span><h3>DJ &amp; LIVE SOUND</h3><p>Premium sound, curated sets, and energy that reads the room all night.</p></div>
@@ -370,7 +360,6 @@
   <div class="lineup" id="lineup">
     <span class="lineup-label">YOUR LINEUP:</span>
     <span class="lineup-empty" id="lineupEmpty">Nothing yet - tap the cards above.</span>
-    <span id="chips" style="display:contents"></span>
     <button class="go" id="goBook">Send to Booking →</button>
   </div>
 </section>
@@ -456,24 +445,21 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{
 }),{threshold:.15});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-const chips=document.getElementById('chips');
 const empty=document.getElementById('lineupEmpty');
 const msg=document.getElementById('fmsg');
 const picks=new Set();
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function refresh(){
-  chips.innerHTML='';
-  empty.style.display=picks.size?'none':'inline';
-  picks.forEach(n=>{
-    const c=document.createElement('span');c.className='chip';c.textContent=n;chips.appendChild(c);
-  });
+  empty.style.display='inline';
+  empty.textContent = picks.size ? Array.from(picks).join(', ') : 'Nothing yet - tap the cards above.';
   const base=msg.value.replace(/^Requested lineup:.*\n?/,'');
   msg.value=picks.size?('Requested lineup: '+[...picks].join(', ')+'\n'+base):base;
 }
 document.querySelectorAll('.svc').forEach(card=>{
   const toggle=()=>{
-    const name=card.dataset.name.replace(/&amp;/g,'&');
+    const rawName = card.dataset.name || card.dataset.title || card.querySelector('h3')?.textContent || 'Selection';
+    const name=rawName.replace(/&amp;/g,'&');
     card.classList.toggle('on');
     const on=card.classList.contains('on');
     card.setAttribute('aria-pressed',on);
@@ -520,7 +506,6 @@ function burst(card){
   const picksField = document.getElementById('package-picks');
   const totalField = document.getElementById('package-total');
   const continueBook = document.getElementById('continue-book');
-  const selection = new Map();
 
   function formatMoney(value) {
     return '$' + Math.round(value);
@@ -528,18 +513,6 @@ function burst(card){
 
   function syncSelection() {
     const activeCards = packageCards.filter(card => card.classList.contains('on'));
-
-    activeCards.forEach(card => {
-      if (!selection.has(card.dataset.package)) {
-        selection.set(card.dataset.package, 20);
-      }
-    });
-
-    Array.from(selection.keys()).forEach(key => {
-      if (!activeCards.some(card => card.dataset.package === key)) {
-        selection.delete(key);
-      }
-    });
 
     if (!activeCards.length) {
       line.innerHTML = '<span class="cart-empty">0 items</span>';
@@ -554,18 +527,15 @@ function burst(card){
     const picks = [];
 
     activeCards.forEach(card => {
-      const key = card.dataset.package;
-      const title = card.dataset.title || card.querySelector('h3')?.textContent.trim() || key;
+      const title = card.dataset.title || card.querySelector('h3')?.textContent.trim() || 'Package item';
       const price = Number(card.dataset.price || 0);
-      const servings = selection.get(key) || 20;
-      const lineTotal = price * (servings / 20);
-      total += lineTotal;
-      picks.push(`${title} (${servings} servings)`);
+      total += price;
+      picks.push(title);
 
-      const pill = document.createElement('div');
-      pill.className = 'cart-pill';
-      pill.innerHTML = `<div><strong>${title}</strong><span>${servings} servings</span></div><button type="button" data-package-toggle="${key}">${servings > 20 ? '−20 servings' : '+20 servings'}</button>`;
-      line.appendChild(pill);
+      const item = document.createElement('span');
+      item.className = 'cart-item';
+      item.textContent = `${title} (+$${Math.round(price)})`;
+      line.appendChild(item);
     });
 
     est.textContent = formatMoney(total);
@@ -576,15 +546,6 @@ function burst(card){
   packageCards.forEach(card => {
     card.addEventListener('click', () => setTimeout(syncSelection, 0));
     card.addEventListener('keydown', () => setTimeout(syncSelection, 0));
-  });
-
-  line.addEventListener('click', event => {
-    const button = event.target.closest('[data-package-toggle]');
-    if (!button) return;
-    const key = button.getAttribute('data-package-toggle');
-    const current = selection.get(key) || 20;
-    selection.set(key, current === 20 ? 40 : 20);
-    syncSelection();
   });
 
   if (continueBook) {
